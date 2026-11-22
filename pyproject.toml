@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "friday-voice-assistant"
+version = "1.0.0"
+description = "A cross-platform voice assistant with Gemini chat"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-genai>=1.0,<2.0",
+]
+
+[project.optional-dependencies]
+voice = [
+    "pyjokes>=0.8.3",
+    "pyttsx3>=2.99",
+    "pyobjc-framework-WebKit; sys_platform == 'darwin'",
+    "requests>=2.32",
+    "SpeechRecognition>=3.14",
+    "wikipedia>=1.4",
+]
+microphone = [
+    "SpeechRecognition[audio]>=3.14",
+]
+dev = [
+    "ruff>=0.11",
+]
+
+[project.scripts]
+friday-assistant = "main:main"
+friday-chat = "chat:main"
+
+[tool.setuptools]
+py-modules = ["chat", "desktop", "main"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
