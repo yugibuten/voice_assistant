@@ -18,7 +18,7 @@ class GeminiChat(Protocol):
 
 
 class GeminiChats(Protocol):
-    def create(self, *, model: str) -> GeminiChat: ...
+    def create(self, *, model: str, config: dict[str, str]) -> GeminiChat: ...
 
 
 class GeminiClient(Protocol):
@@ -55,7 +55,9 @@ class ChatSession:
 
         # Keep the client alive for as long as its chat uses the HTTP transport.
         self._client = client
-        self._chat = self._client.chats.create(model=self.model)
+        self._chat = self._client.chats.create(
+            model=self.model, config={"system_instruction": "Your name is Yugi."}
+        )
 
     def reply(self, prompt: str) -> str:
         """Send a message in the current conversation and return its reply."""
@@ -85,7 +87,7 @@ def main() -> int:
         print(f"Unable to start Gemini chat: {error}")
         return 1
 
-    print("Friday is ready. Type 'bye' to exit.")
+    print("Yugi is ready. Type 'bye' to exit.")
     while True:
         try:
             prompt = input("You: ").strip()
@@ -102,12 +104,12 @@ def main() -> int:
         try:
             response = chat.reply(prompt)
         except RuntimeError as error:
-            print(f"Friday: {error}")
+            print(f"Yugi: {error}")
             continue
         except KeyboardInterrupt:
             print("\nGoodbye.")
             return 0
-        print(f"Friday: {response}")
+        print(f"Yugi: {response}")
 
 
 if __name__ == "__main__":

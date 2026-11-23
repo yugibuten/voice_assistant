@@ -1,4 +1,4 @@
-"""Cross-platform Friday voice assistant."""
+"""Cross-platform Yugi voice assistant."""
 
 from __future__ import annotations
 
@@ -215,7 +215,7 @@ def _open_music(track: str) -> None:
         subprocess.Popen(command)
 
 
-class FridayAssistant:
+class YugiAssistant:
     """Dispatch voice commands while initializing optional services on demand."""
 
     def __init__(
@@ -329,15 +329,15 @@ def run_voice(
             show_status("speaking", "Speaking")
             speaker(message)
 
-    assistant = FridayAssistant(speaker=speak_with_status)
+    assistant = YugiAssistant(speaker=speak_with_status)
     active = False
-    show_status("standby", "Say “Hey Friday”")
+    show_status("standby", "Say “Hey Yugi”")
     while not stop.is_set():
         query = listen_command(on_pcm)
         if not query or stop.is_set():
             continue
         if not active:
-            wake = re.search(r"\bhey\s+friday\b", query, re.IGNORECASE)
+            wake = re.search(r"\bhey\s+yu\s*gi\b", query, re.IGNORECASE)
             if wake is None:
                 continue
             active = True
@@ -351,7 +351,7 @@ def run_voice(
             if not return_to_standby:
                 return
             active = False
-            show_status("standby", "Say “Hey Friday”")
+            show_status("standby", "Say “Hey Yugi”")
         else:
             show_status("listening", "Listening")
 
@@ -370,7 +370,7 @@ def main() -> int:
     try:
         run_voice(speaker=speak, show_status=show_status, stop=Event())
     except (ImportError, OSError, RuntimeError, AttributeError) as error:
-        print(f"Friday could not start or continue voice mode: {error}")
+        print(f"Yugi could not start or continue voice mode: {error}")
         return 1
     except KeyboardInterrupt:
         return 0

@@ -1,4 +1,4 @@
-"""Native macOS window for Friday's voice status."""
+"""Native macOS window for Yugi's voice status."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ _ORB_HTML = """
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Friday</title>
+<title>Yugi</title>
 <style>
   html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
@@ -33,7 +33,7 @@ _ORB_HTML = """
   }
 </style>
 <canvas aria-hidden="true"></canvas>
-<p role="status">Say “Hey Friday”</p>
+<p role="status">Say “Hey Yugi”</p>
 <script>
   const canvas = document.querySelector('canvas');
   const ctx = canvas.getContext('2d');
@@ -46,12 +46,12 @@ _ORB_HTML = """
   const stars = Array.from({length: 86}, () => [
     Math.random(), Math.random(), Math.random()
   ]);
-  window.fridayStatus = (state, label) => {
+  window.yugiStatus = (state, label) => {
     mode = state;
     targetLevel = 0;
     statusText.textContent = label;
   };
-  window.fridayAudioLevel = value => { targetLevel = value; };
+  window.yugiAudioLevel = value => { targetLevel = value; };
   function resize() {
     const pixelRatio = window.devicePixelRatio || 1;
     w = canvas.clientWidth;
@@ -182,13 +182,13 @@ def run_desktop(run_voice: Callable[..., None]) -> int:
         if not stop.is_set():
             arguments = json.dumps([state, label])
             view.evaluateJavaScript_completionHandler_(
-                f"window.fridayStatus(...{arguments})", None
+                f"window.yugiStatus(...{arguments})", None
             )
 
     def update_level(level: float) -> None:
         if not stop.is_set():
             view.evaluateJavaScript_completionHandler_(
-                f"window.fridayAudioLevel({level:.4f})", None
+                f"window.yugiAudioLevel({level:.4f})", None
             )
 
     def voice_worker() -> None:
@@ -216,10 +216,10 @@ def run_desktop(run_voice: Callable[..., None]) -> int:
             subprocess.SubprocessError,
             wave.Error,
         ) as error:
-            print(f"Friday voice mode stopped: {error}")
+            print(f"Yugi voice mode stopped: {error}")
             show_status("error", "Voice unavailable. Check the terminal for details.")
 
-    class FridayWindowDelegate(NSObject):
+    class YugiWindowDelegate(NSObject):
         def webView_didFinishNavigation_(self, web_view, navigation):
             if not worker.is_alive() and worker.ident is None:
                 worker.start()
@@ -228,8 +228,8 @@ def run_desktop(run_voice: Callable[..., None]) -> int:
             stop.set()
             app.terminate_(None)
 
-    worker = Thread(target=voice_worker, name="Friday voice", daemon=True)
-    delegate = FridayWindowDelegate.alloc().init()
+    worker = Thread(target=voice_worker, name="Yugi voice", daemon=True)
+    delegate = YugiWindowDelegate.alloc().init()
     bounds = AppKit.NSMakeRect(0, 0, 360, 360)
     style = AppKit.NSWindowStyleMaskTitled | AppKit.NSWindowStyleMaskClosable
     window = AppKit.NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
@@ -239,7 +239,7 @@ def run_desktop(run_voice: Callable[..., None]) -> int:
     view.setNavigationDelegate_(delegate)
     window.setDelegate_(delegate)
     window.setContentView_(view)
-    window.setTitle_("Friday")
+    window.setTitle_("Yugi")
     window.center()
     view.loadHTMLString_baseURL_(_ORB_HTML, None)
     app.setActivationPolicy_(AppKit.NSApplicationActivationPolicyRegular)

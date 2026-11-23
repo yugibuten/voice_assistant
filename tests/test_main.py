@@ -10,7 +10,7 @@ from google.genai import types
 
 from chat import ChatSession
 from desktop import _voice_level
-from main import FridayAssistant, get_weather, listen_command, run_voice, safe_calculate
+from main import YugiAssistant, get_weather, listen_command, run_voice, safe_calculate
 
 
 class CalculatorTests(unittest.TestCase):
@@ -88,13 +88,13 @@ class VoiceAudioTests(unittest.TestCase):
             return audio
 
         recognizer.listen.side_effect = listen
-        recognizer.recognize_google.return_value = "Hey Friday"
+        recognizer.recognize_google.return_value = "Hey Yugi"
         with (
             patch("speech_recognition.Recognizer", return_value=recognizer),
             patch("speech_recognition.Microphone") as microphone,
         ):
             microphone.return_value.__enter__.return_value = source
-            self.assertEqual(listen_command(observed.append), "Hey Friday")
+            self.assertEqual(listen_command(observed.append), "Hey Yugi")
 
         self.assertEqual(observed, [samples, b""])
         recognizer.recognize_google.assert_called_once_with(audio, language="en-IN")
@@ -139,10 +139,10 @@ class AssistantTests(unittest.TestCase):
                 "main.listen_command",
                 side_effect=[
                     "Ignore this before activation",
-                    "Hey Friday, remember blue",
+                    "Hey Yugi, remember blue",
                     "Also remember green",
                     "Bye",
-                    f"Hey Friday, {follow_up}",
+                    f"Hey Yu Gi, {follow_up}",
                 ],
             ),
         ):
@@ -172,7 +172,7 @@ class AssistantTests(unittest.TestCase):
 
     def test_goodbye_stops_the_assistant(self) -> None:
         spoken: list[str] = []
-        assistant = FridayAssistant(speaker=spoken.append)
+        assistant = YugiAssistant(speaker=spoken.append)
 
         self.assertFalse(assistant.handle_command("bye"))
         self.assertEqual(spoken, ["I will be back."])
@@ -183,7 +183,7 @@ class AssistantTests(unittest.TestCase):
                 return f"Answer: {prompt}"
 
         spoken: list[str] = []
-        assistant = FridayAssistant(
+        assistant = YugiAssistant(
             speaker=spoken.append,
             chat_session=FakeChatSession(),
         )
@@ -193,7 +193,7 @@ class AssistantTests(unittest.TestCase):
 
     def test_time_command_uses_the_clock(self) -> None:
         spoken: list[str] = []
-        assistant = FridayAssistant(speaker=spoken.append)
+        assistant = YugiAssistant(speaker=spoken.append)
 
         self.assertTrue(assistant.handle_command("What time is it?"))
         self.assertRegex(spoken[0], r"^The time is \d{2}:\d{2}\.$")

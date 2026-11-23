@@ -39,15 +39,18 @@ class ChatSessionTests(unittest.TestCase):
         send_message = client.chats.create.return_value.send_message
         send_message.side_effect = [
             Mock(text="  Hello.  "),
-            Mock(text="You said your name is Friday."),
+            Mock(text="You said your name is Yugi."),
         ]
         with patch.dict("os.environ", {"GEMINI_MODEL": ""}):
             chat = ChatSession(client=client)
 
         self.assertEqual(chat.reply(" Hi "), "Hello.")
-        self.assertEqual(chat.reply("What did I say?"), "You said your name is Friday.")
+        self.assertEqual(chat.reply("What did I say?"), "You said your name is Yugi.")
 
-        client.chats.create.assert_called_once_with(model="gemini-3.5-flash")
+        client.chats.create.assert_called_once_with(
+            model="gemini-3.5-flash",
+            config={"system_instruction": "Your name is Yugi."},
+        )
         self.assertEqual(
             [call.args for call in send_message.call_args_list],
             [("Hi",), ("What did I say?",)],
@@ -75,8 +78,8 @@ class ChatSessionTests(unittest.TestCase):
         ):
             self.assertEqual(main(), 0)
 
-        output.assert_any_call("Friday: Gemini request failed (HTTP 429).")
-        output.assert_any_call("Friday: Hello again.")
+        output.assert_any_call("Yugi: Gemini request failed (HTTP 429).")
+        output.assert_any_call("Yugi: Hello again.")
 
     def test_missing_key_fails_with_setup_guidance(self) -> None:
         with patch.dict("os.environ", {}, clear=True):
