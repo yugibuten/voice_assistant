@@ -1,6 +1,6 @@
 # Yugi Voice Assistant
 
-A cross-platform Python voice assistant with Gemini 3.5 Flash chat, speech recognition and
+A Python voice assistant with Gemini 3.5 Flash chat, speech recognition and
 playback, Wikipedia summaries, jokes, weather, music playback, and safe basic
 arithmetic. Text chat can be used without a microphone.
 
