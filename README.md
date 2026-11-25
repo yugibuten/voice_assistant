@@ -125,6 +125,12 @@ ruff check .
 ruff format --check .
 ```
 
+##Preview
+
+
+https://github.com/user-attachments/assets/605d08e7-a4c4-44f2-908c-f44d486d004e
+
+
 ## Credential safety
 
 The original source contained an API credential and a WolframAlpha app ID.
