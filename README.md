@@ -1,4 +1,4 @@
-# Yugi Voice Assistant
+# Alpha Voice Assistant
 
 A Python voice assistant with Gemini 3.5 Flash chat, speech recognition and
 playback, Wikipedia summaries, jokes, weather, music playback, and safe basic
@@ -69,10 +69,10 @@ Windows PowerShell:
 $env:GEMINI_API_KEY = "your-key"
 ```
 
-Yugi uses Gemini 3.5 Flash (`gemini-3.5-flash`) by default in both text and
+Alpha uses Gemini 3.5 Flash (`gemini-3.5-flash`) by default in both text and
 voice chat. Set `GEMINI_MODEL` to use a different model available to your API
 key. The Google Gen AI SDK keeps the conversation history in memory and sends
-it with each new chat message. Restart Yugi to begin a new conversation.
+it with each new chat message. Restart Alpha to begin a new conversation.
 
 ## Run
 
@@ -89,15 +89,15 @@ python main.py
 ```
 
 On macOS, this opens a small window with an animated orb. The orb changes as
-Yugi listens, thinks, and speaks. The rings expand and ripple with the volume
-of your microphone and Yugi's spoken replies. Say **“Hey Yugi”** to activate
-it, or say **“Hey Yugi, what time is it?”** to activate it and give a command
+Alpha listens, thinks, and speaks. The rings expand and ripple with the volume
+of your microphone and Alpha's spoken replies. Say **“Hey Alpha”** to activate
+it, or say **“Hey Alpha, what time is it?”** to activate it and give a command
 together.
 Say **“Bye”** to return to standby. Gemini remembers previous turns when you
 wake Yugi again while the window is open. Closing the window clears that
 session's conversation history.
 
-On other platforms, Yugi runs voice mode in the terminal. On macOS, use
+On other platforms, Alpha runs voice mode in the terminal. On macOS, use
 `python main.py --terminal` to run voice mode without opening the window.
 
 Try commands such as:
